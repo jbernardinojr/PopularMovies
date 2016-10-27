@@ -5,9 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.example.jbsjunior.popularmovies.Fragment.MoviesFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,25 +17,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        Picasso.with(getApplicationContext())
-                .load("http://image.tmdb.org/t/p/w185/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg")
-                .into(imageView);
-
-        ImageView imageView2 = (ImageView) findViewById(R.id.imageView2);
-        Picasso.with(getApplicationContext())
-                .load("http://image.tmdb.org/t/p/w185/lZpWprJqbIFpEV5uoHfoK0KCnTW.jpg")
-                .into(imageView2);
-
-        ImageView imageView4 = (ImageView) findViewById(R.id.imageView4);
-        Picasso.with(getApplicationContext())
-                .load("http://image.tmdb.org/t/p/w185/t0IfTnOnWBrLQPoFxdtHmr4BnVS.jpg")
-                .into(imageView4);
-
-        ImageView imageView5 = (ImageView) findViewById(R.id.imageView5);
-        Picasso.with(getApplicationContext())
-                .load("http://image.tmdb.org/t/p/w185/ixZn1uPR3nw51plNEOpLuchWe7K.jpg")
-                .into(imageView5);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content_main, new MoviesFragment())
+                    .commit();
+        }
     }
 
     @Override
