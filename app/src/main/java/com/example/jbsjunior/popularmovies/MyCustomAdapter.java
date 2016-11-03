@@ -9,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jbsjunior.popularmovies.Model.Movie;
+import com.example.jbsjunior.popularmovies.server.URLServer;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import static com.example.jbsjunior.popularmovies.server.URLServer.URL_IMAGE_MOVIE;
 
 /**
  * Created by JBSJunior on 01/11/2016.
@@ -52,10 +51,10 @@ public class MyCustomAdapter extends ArrayAdapter {
         }else {
             handler = (DataHandler) mRow.getTag();
         }
-
         Movie movie = (Movie) this.getItem(position);
         handler.txtMovieName.setText(movie.getTitle());
-        Picasso.with(getContext()).load(URL_IMAGE_MOVIE + movie.getPosterPath()).into(handler.imageMovie);
+        Picasso.with(getContext()).load(URLServer.URL_IMAGE_MOVIE + movie.getPosterPath()).into(handler.imageMovie);
+
         return mRow;
     }
 
