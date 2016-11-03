@@ -11,41 +11,42 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.jbsjunior.popularmovies.DetailsMovieActivity"
-    tools:showIn="@layout/activity_details_movie">
+    tools:showIn="@layout/activity_details_movie"
+    android:background="?attr/colorPrimary">
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtMovieDescription"
+        android:textSize="18sp"
+        android:layout_marginTop="18dp"
+        android:maxLines = "8"
+        android:scrollbars = "vertical"
+        android:scrollHorizontally="false"
+        android:layout_below="@+id/imgDetailMoviePoster"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtMovieTitle"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:textStyle="normal|bold|italic"
         android:textSize="24sp"
-        android:textAlignment="center" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtMovieDescription"
-        android:textSize="18sp"
-        android:textAlignment="viewStart"
-        android:layout_alignTop="@+id/imgDetailMoviePoster"
-        android:layout_toRightOf="@+id/imgDetailMoviePoster"
-        android:layout_toEndOf="@+id/imgDetailMoviePoster"
-        android:layout_marginLeft="81dp"
-        android:layout_marginStart="81dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imgDetailMoviePoster"
-        android:layout_marginTop="37dp"
-        android:layout_marginLeft="41dp"
-        android:layout_marginStart="41dp"
-        android:layout_below="@+id/txtMovieTitle"
+        android:textAlignment="center"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <ImageView
+        app:srcCompat="@mipmap/ic_launcher"
+        android:id="@+id/imgDetailMoviePoster"
+        android:layout_marginTop="22dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMovieTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_width="210dp" />
+
 </RelativeLayout>

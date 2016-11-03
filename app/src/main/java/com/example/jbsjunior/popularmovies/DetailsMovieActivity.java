@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +46,8 @@ public class DetailsMovieActivity extends AppCompatActivity {
         Picasso.with(DetailsMovieActivity.this)
                 .load(URLServer.URL_IMAGE_MOVIE + movie.getPosterPath())
                 .into(imgViewPoster);
+
+        txtMovieDescription.setMovementMethod(new ScrollingMovementMethod());
     }
 
 }

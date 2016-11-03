@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.jbsjunior.popularmovies.Model.Movie;
 import com.example.jbsjunior.popularmovies.server.URLServer;
@@ -42,24 +41,24 @@ public class MyCustomAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View mRow = convertView;
-        DataHandler handler = new DataHandler();
+        DataHandler dataHandler = new DataHandler();
         if (mRow == null) {
             mRow = mInflater.from(getContext()).inflate(R.layout.movies_item, parent, false);
-            handler.imageMovie = (ImageView) mRow.findViewById(R.id.imgMovie);
-            handler.txtMovieName = (TextView) mRow.findViewById(R.id.list_item_movie_textView);
-            mRow.setTag(handler);
+            dataHandler.imageMovie = (ImageView) mRow.findViewById(R.id.imgMovie);
+            mRow.setTag(dataHandler);
         }else {
-            handler = (DataHandler) mRow.getTag();
+            dataHandler = (DataHandler) mRow.getTag();
         }
-        Movie movie = (Movie) this.getItem(position);
-        handler.txtMovieName.setText(movie.getTitle());
-        Picasso.with(getContext()).load(URLServer.URL_IMAGE_MOVIE + movie.getPosterPath()).into(handler.imageMovie);
+        Movie movie = mMovies.get(position);
+        Picasso.with(getContext())
+                .load(URLServer.URL_IMAGE_MOVIE + movie.getPosterPath())
+                .placeholder(R.drawable.defaultposter)
+                .into(dataHandler.imageMovie);
 
         return mRow;
     }
 
     private class DataHandler {
         ImageView imageMovie;
-        TextView txtMovieName;
     }
 }

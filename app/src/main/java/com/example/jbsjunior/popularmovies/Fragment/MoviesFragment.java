@@ -3,11 +3,12 @@ package com.example.jbsjunior.popularmovies.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import com.example.jbsjunior.popularmovies.DetailsMovieActivity;
 import com.example.jbsjunior.popularmovies.Model.Movie;
@@ -25,7 +26,7 @@ import java.util.List;
 public class MoviesFragment extends Fragment implements MovieTaskCallBack {
 
     List<Movie> mMovies;
-    ListView lv;
+    GridView gv;
     MyCustomAdapter mMyCustomAdapter;
 
     public MoviesFragment() {}
@@ -40,10 +41,9 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
+        gv = (GridView) rootView.findViewById(R.id.gridview_movies);
 
-        lv = (ListView) rootView.findViewById(R.id.listview_movies);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Gson gson = new Gson();
@@ -55,8 +55,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
                 startActivity(intent);
             }
         });
-
-        MoviesTask moviesTask = new MoviesTask(rootView.getContext(), MoviesFragment.this);
+        MoviesTask moviesTask = new MoviesTask(getContext(), MoviesFragment.this);
         moviesTask.execute();
 
         return rootView;
@@ -64,12 +63,13 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
 
     @Override
     public void onTaskCallBack(List<Movie> lm) {
-        mMovies = lm;
-        mMyCustomAdapter = new MyCustomAdapter(getContext(), R.id.listview_movies, mMovies);
-        for (int i=0; i<0; i++) {
-            mMyCustomAdapter.add(mMovies.get(i));
+        if (mMovies!=null && mMovies.size()>0) {
+            mMovies.clear();
         }
-        lv.setAdapter(mMyCustomAdapter);
+        mMovies = lm;
+        mMyCustomAdapter = new MyCustomAdapter(getContext(), R.id.gridview_movies, mMovies);
+        gv.setAdapter(mMyCustomAdapter);
+        Log.d("Teste", "onTaskCallBack "  + lm.size());
     }
 
 }

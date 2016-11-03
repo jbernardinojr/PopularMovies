@@ -4,25 +4,13 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView android:text="Movie Title"
-        android:layout_width="222dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:id="@+id/list_item_movie_textView"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imgMovie"
-        android:layout_marginLeft="11dp"
-        android:layout_marginStart="11dp"
-        android:textSize="18sp" />
-
     <ImageView
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
         android:id="@+id/imgMovie"
-        android:layout_width="185dp"
+        android:adjustViewBounds="true"
+        android:layout_width="275dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
