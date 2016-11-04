@@ -1,4 +1,4 @@
-package com.example.jbsjunior.popularmovies;
+package com.example.jbsjunior.popularmovies.Interface;
 
 import com.example.jbsjunior.popularmovies.Model.Movie;
 

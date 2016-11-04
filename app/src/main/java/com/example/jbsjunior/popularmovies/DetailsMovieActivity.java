@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.jbsjunior.popularmovies.Model.Movie;
@@ -38,13 +39,18 @@ public class DetailsMovieActivity extends AppCompatActivity {
         TextView txtMovieTitle = (TextView) findViewById(R.id.txtMovieTitle);
         TextView txtMovieDescription = (TextView) findViewById(R.id.txtMovieDescription);
         ImageView imgViewPoster = (ImageView) findViewById(R.id.imgDetailMoviePoster);
+        RatingBar voteAvgBar = (RatingBar) findViewById(R.id.voteAverageBar);
 
-        txtMovieTitle.setText(movie.getReleaseDate().substring(0,4) + "\n" + movie.getVoteAverage());
+
+        txtMovieTitle.setText(movie.getReleaseDate().substring(0,4));
         txtMovieDescription.setText(movie.getOverview());
         Picasso.with(DetailsMovieActivity.this)
                 .load(URLServer.URL_IMAGE_MOVIE + movie.getPosterPath())
                 .into(imgViewPoster);
 
+        float avgRatingStars = ((float)movie.getVoteAverage() * 5) / 10;
+
+        voteAvgBar.setRating(avgRatingStars);
         txtMovieDescription.setMovementMethod(new ScrollingMovementMethod());
     }
 

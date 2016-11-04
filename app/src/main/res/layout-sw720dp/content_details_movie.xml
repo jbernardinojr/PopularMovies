@@ -19,39 +19,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtMovieTitle"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textAlignment="center"
-        android:layout_marginRight="48dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="172dp"
         android:layout_alignBottom="@+id/imgDetailMoviePoster"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="90dp" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtMovieDescription"
-        android:textSize="18sp"
-        android:maxLines = "8"
-        android:scrollbars = "vertical"
-        android:scrollHorizontally="false"
-        android:layout_marginTop="54dp"
-        android:layout_below="@+id/imgDetailMoviePoster"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_toRightOf="@+id/imgDetailMoviePoster"
+        android:layout_toEndOf="@+id/imgDetailMoviePoster" />
 
     <ImageView
         app:srcCompat="@mipmap/ic_launcher"
         android:id="@+id/imgDetailMoviePoster"
-        android:layout_height="235dp"
-        android:layout_width="240dp"
+        android:layout_width="500dp"
+        android:layout_height="385sp"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/txtMovieTitle"
-        android:layout_toStartOf="@+id/txtMovieTitle"
-        android:layout_marginRight="15dp"
-        android:layout_marginEnd="15dp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -62,5 +44,19 @@
         android:layout_above="@+id/txtMovieTitle"
         android:layout_alignLeft="@+id/txtMovieTitle"
         android:layout_alignStart="@+id/txtMovieTitle" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtMovieDescription"
+        android:textSize="24sp"
+        android:maxLines = "8"
+        android:scrollbars = "vertical"
+        android:scrollHorizontally="false"
+        android:layout_below="@+id/txtMovieTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="114dp" />
 
 </RelativeLayout>

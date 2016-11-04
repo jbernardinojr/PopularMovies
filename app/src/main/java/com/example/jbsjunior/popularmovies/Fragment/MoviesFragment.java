@@ -15,7 +15,7 @@ import android.widget.GridView;
 
 import com.example.jbsjunior.popularmovies.DetailsMovieActivity;
 import com.example.jbsjunior.popularmovies.Model.Movie;
-import com.example.jbsjunior.popularmovies.MovieTaskCallBack;
+import com.example.jbsjunior.popularmovies.Interface.MovieTaskCallBack;
 import com.example.jbsjunior.popularmovies.MoviesTask;
 import com.example.jbsjunior.popularmovies.MyCustomAdapter;
 import com.example.jbsjunior.popularmovies.R;
