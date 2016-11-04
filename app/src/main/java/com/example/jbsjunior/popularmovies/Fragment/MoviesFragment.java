@@ -1,10 +1,13 @@
 package com.example.jbsjunior.popularmovies.Fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,6 +41,12 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        updateViewMode();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
@@ -55,21 +64,37 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
                 startActivity(intent);
             }
         });
-        MoviesTask moviesTask = new MoviesTask(getContext(), MoviesFragment.this);
-        moviesTask.execute();
 
+        updateViewMode();
         return rootView;
     }
 
     @Override
-    public void onTaskCallBack(List<Movie> lm) {
-        if (mMovies!=null && mMovies.size()>0) {
-            mMovies.clear();
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_refresh) {
+            updateViewMode();
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void updateViewMode() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String view_mode = prefs.getString(getString(R.string.pref_view_key), getString(R.string.pref_view_default));
+
+        MoviesTask moviesTask = new MoviesTask(getContext(), MoviesFragment.this);
+        moviesTask.execute(view_mode);
+    }
+
+    @Override
+    public void onTaskCallBack(List<Movie> lm) {
         mMovies = lm;
         mMyCustomAdapter = new MyCustomAdapter(getContext(), R.id.gridview_movies, mMovies);
         gv.setAdapter(mMyCustomAdapter);
         Log.d("Teste", "onTaskCallBack "  + lm.size());
     }
-
 }

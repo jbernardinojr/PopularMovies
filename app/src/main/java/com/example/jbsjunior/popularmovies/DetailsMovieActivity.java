@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,7 +30,6 @@ public class DetailsMovieActivity extends AppCompatActivity {
         String movieAsString = intent.getStringExtra("list_movies");
         int position = intent.getIntExtra("position", 0);
 
-        Log.d("Teste", movieAsString);
         Gson gson = new Gson();
         Type type = new TypeToken<List<Movie>>(){}.getType();
         final List<Movie> movies = gson.fromJson(movieAsString, type);
@@ -41,7 +39,7 @@ public class DetailsMovieActivity extends AppCompatActivity {
         TextView txtMovieDescription = (TextView) findViewById(R.id.txtMovieDescription);
         ImageView imgViewPoster = (ImageView) findViewById(R.id.imgDetailMoviePoster);
 
-        txtMovieTitle.setText(movie.getTitle());
+        txtMovieTitle.setText(movie.getReleaseDate().substring(0,4) + "\n" + movie.getVoteAverage());
         txtMovieDescription.setText(movie.getOverview());
         Picasso.with(DetailsMovieActivity.this)
                 .load(URLServer.URL_IMAGE_MOVIE + movie.getPosterPath())

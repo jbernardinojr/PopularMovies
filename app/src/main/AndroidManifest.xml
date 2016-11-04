@@ -3,6 +3,7 @@
     package="com.example.jbsjunior.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +24,15 @@
         <activity
             android:name=".DetailsMovieActivity"
             android:label="@string/title_activity_details_movie"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.jbsjunior.popularmovies.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
