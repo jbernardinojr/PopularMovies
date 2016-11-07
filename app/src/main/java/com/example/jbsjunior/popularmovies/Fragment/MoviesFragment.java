@@ -28,9 +28,9 @@ import java.util.List;
  */
 public class MoviesFragment extends Fragment implements MovieTaskCallBack {
 
-    List<Movie> mMovies;
-    GridView gv;
-    MyCustomAdapter mMyCustomAdapter;
+    private List<Movie> mMovies;
+    private GridView gv;
+    private MyCustomAdapter mMyCustomAdapter;
 
     public MoviesFragment() {}
 
@@ -95,6 +95,5 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
         mMovies = lm;
         mMyCustomAdapter = new MyCustomAdapter(getContext(), R.id.gridview_movies, mMovies);
         gv.setAdapter(mMyCustomAdapter);
-        Log.d("Teste", "onTaskCallBack "  + lm.size());
     }
 }

@@ -1,6 +1,7 @@
 package com.example.jbsjunior.popularmovies;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,8 @@ import java.util.List;
 
 public class MyCustomAdapter extends ArrayAdapter {
 
-    private LayoutInflater mInflater;
-    private List<Movie> mMovies;
+    private final LayoutInflater mInflater;
+    private final List<Movie> mMovies;
 
     public MyCustomAdapter(Context context, int resource, List<Movie> movies) {
         super(context, resource, movies);
@@ -33,17 +34,13 @@ public class MyCustomAdapter extends ArrayAdapter {
         super.add(object);
     }
 
-    @Override
-    public int getCount() {
-        return super.getCount();
-    }
-
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View mRow = convertView;
         DataHandler dataHandler = new DataHandler();
         if (mRow == null) {
-            mRow = mInflater.from(getContext()).inflate(R.layout.movies_item, parent, false);
+            mRow = mInflater.inflate(R.layout.movies_item, parent, false);
             dataHandler.imageMovie = (ImageView) mRow.findViewById(R.id.imgMovie);
             mRow.setTag(dataHandler);
         }else {
