@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +13,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.jbsjunior.popularmovies.DetailsMovieActivity;
-import com.example.jbsjunior.popularmovies.Model.Movie;
 import com.example.jbsjunior.popularmovies.Interface.MovieTaskCallBack;
-import com.example.jbsjunior.popularmovies.MoviesTask;
+import com.example.jbsjunior.popularmovies.Model.Movie;
+import com.example.jbsjunior.popularmovies.MovieTask;
 import com.example.jbsjunior.popularmovies.MyCustomAdapter;
 import com.example.jbsjunior.popularmovies.R;
 import com.google.gson.Gson;
@@ -86,7 +85,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String view_mode = prefs.getString(getString(R.string.pref_view_key), getString(R.string.pref_view_default));
 
-        MoviesTask moviesTask = new MoviesTask(getContext(), MoviesFragment.this);
+        MovieTask moviesTask = new MovieTask(getContext(), MoviesFragment.this);
         moviesTask.execute(view_mode);
     }
 
