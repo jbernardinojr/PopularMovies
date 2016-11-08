@@ -18,7 +18,6 @@ import com.example.jbsjunior.popularmovies.Model.Movie;
 import com.example.jbsjunior.popularmovies.MovieTask;
 import com.example.jbsjunior.popularmovies.MyCustomAdapter;
 import com.example.jbsjunior.popularmovies.R;
-import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -54,30 +53,22 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Gson gson = new Gson();
-                String jsonMovies = gson.toJson(mMovies);
-
                 Intent intent = new Intent(getActivity(), DetailsMovieActivity.class);
-                intent.putExtra("list_movies", jsonMovies);
-                intent.putExtra("position", position);
+                intent.putExtra(Movie.PARCELABLE_KEY, mMovies.get(position));
                 startActivity(intent);
             }
         });
-
-        updateViewMode();
         return rootView;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
             updateViewMode();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

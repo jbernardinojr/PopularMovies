@@ -7,16 +7,19 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.jbsjunior.popularmovies.Fragment.MoviesFragment;
+import com.example.jbsjunior.popularmovies.Fragment.NetworkDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private NetworkDialogFragment mDialogFragment;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -28,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
                         .add(R.id.content_main, new MoviesFragment())
                         .commit();
             } else {
-                Toast.makeText(getApplicationContext(), getString(R.string.toast_no_connection), Toast.LENGTH_SHORT).show();
-                finish();
+                showDialog();
             }
         }
 
@@ -63,5 +65,20 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    void showDialog() {
+        mDialogFragment = NetworkDialogFragment.newInstance(R.string.no_network_conn_title);
+        mDialogFragment.show(getFragmentManager(), "dialog");
+    }
+
+    public void doPositiveClick() {
+        // Do stuff here.
+        Log.i("FragmentAlertDialog", "Positive click!");
+        if (mDialogFragment != null) {
+            mDialogFragment.dismiss();
+            finish();
+        }
+
     }
 }

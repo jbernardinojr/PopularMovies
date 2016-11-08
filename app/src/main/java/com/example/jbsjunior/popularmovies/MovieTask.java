@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.jbsjunior.popularmovies.Interface.MovieTaskCallBack;
 import com.example.jbsjunior.popularmovies.Model.Movie;
+import com.example.jbsjunior.popularmovies.server.ApiKey;
 import com.example.jbsjunior.popularmovies.server.URLServer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -66,7 +67,7 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
         String movieJsonStr;
 
         publishProgress(1);
-        String sApi = "<your movie db api key here>";
+        String sApi = ApiKey.API_KEY; //put you movie db API Key Here
         String sViewModeMovie = "";
         if (params[0].equals("/movie/popular")) {
             sViewModeMovie =  URL_MOVIE_POPULAR;
@@ -74,7 +75,6 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
             sViewModeMovie =  URL_MOVIE_TOP_RATED;
         }
 
-        Log.d(LOG_TAG, "Mode View=" + sViewModeMovie);
         Uri uriBuilder = Uri
                 .parse(URLServer.URL_BASE_API_MOVIE + sViewModeMovie.trim())
                 .buildUpon()
@@ -98,12 +98,10 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
         InputStream inputStream;
         StringBuffer buffer = new StringBuffer();
         try {
-
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
             publishProgress(3);
-
             inputStream = urlConnection.getInputStream();
 
             if (inputStream == null) {
@@ -112,8 +110,6 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
-
-
             String line;
             while ((line = reader.readLine())!= null) {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
@@ -121,14 +117,12 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                 // buffer for debugging.
                 buffer.append(line);
             }
-
             publishProgress(5);
 
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
                 return null;
             }
-
             publishProgress(6);
             movieJsonStr = buffer.toString();
 
@@ -143,10 +137,6 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                 mRespArray = mMoviesJson.getJSONArray("results");
                 movies = new ArrayList<>();
 
-                if (movies.size()>0) {
-                    movies.clear();
-                }
-
                 for (int i=0; i < mRespArray.length(); i++) {
                     mJsonObjMovies = mRespArray.getJSONObject(i);
                     Movie movie = gson.fromJson(mJsonObjMovies.toString(), Movie.class);
@@ -154,15 +144,12 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                     Log.d(LOG_TAG, movie.getTitle());
                 }
                 publishProgress(7);
-
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.toString());
             }
         } catch (IOException|NullPointerException e) {
             Log.e(LOG_TAG, "Error ", e);
-        }
-
-        finally {
+        } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -174,7 +161,6 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                 }
             }
         }
-        Log.d(LOG_TAG, "doInBack=" + movies.size());
         return movies;
     }
 

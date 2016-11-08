@@ -24,6 +24,7 @@
         <activity
             android:name=".DetailsMovieActivity"
             android:label="@string/title_activity_details_movie"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SettingsActivity"
