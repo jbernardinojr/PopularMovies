@@ -1,12 +1,12 @@
 package com.example.jbsjunior.popularmovies.Fragment;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 
-import com.example.jbsjunior.popularmovies.MainActivity;
 import com.example.jbsjunior.popularmovies.R;
 
 /**
@@ -23,7 +23,12 @@ public class NetworkDialogFragment extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public void setTargetFragment(Fragment fragment, int requestCode) {
+        super.setTargetFragment(fragment, requestCode);
+    }
+
+    @Override
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         int title = getArguments().getInt("title");
 
         return new AlertDialog.Builder(getActivity())
@@ -32,7 +37,14 @@ public class NetworkDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.alert_dialog_ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                ((MainActivity)getActivity()).doPositiveClick();
+                                ((MoviesFragment)getTargetFragment()).doPositiveClick();
+                            }
+                        }
+                )
+                .setNegativeButton(R.string.alert_dialog_cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                ((MoviesFragment)getTargetFragment()).doNegativeClick();
                             }
                         }
                 )

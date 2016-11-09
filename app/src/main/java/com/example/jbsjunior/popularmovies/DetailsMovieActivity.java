@@ -31,14 +31,14 @@ public class DetailsMovieActivity extends AppCompatActivity {
             this.movie = (Movie) bundle.getParcelable(Movie.PARCELABLE_KEY);
 
             ScrollView sv = (ScrollView) findViewById(R.id.scroll_detail_activity);
-            TextView txtMovieReleaseDate = (TextView) findViewById(R.id.txtMovieReleaseDate);
+            TextView txtMovieReleaseDateTitle = (TextView) findViewById(R.id.txtMovieReleaseDateTitle);
             TextView txtMovieDescription = (TextView) findViewById(R.id.txtMovieDescription);
             ImageView imgViewPoster = (ImageView) findViewById(R.id.imgDetailMoviePoster);
             RatingBar voteAvgBar = (RatingBar) findViewById(R.id.voteAverageBar);
 
             sv.setFillViewport(true);
-
-            txtMovieReleaseDate.setText(movie.getReleaseDate().substring(0, 4));
+            txtMovieReleaseDateTitle.setText(movie.getOriginalTitle() + "\n"
+                    + movie.getReleaseDate().substring(0, 4));
             txtMovieDescription.setText(movie.getOverview());
             Picasso.with(DetailsMovieActivity.this)
                     .load(URLServer.URL_IMAGE_MOVIE + movie.getPosterPath())
