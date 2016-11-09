@@ -122,7 +122,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
             updateViewMode();
         }
     }
-
+/*
     public void doNegativeClick() {
         if (mDialogFragment != null) {
             mDialogFragment.dismiss();
@@ -134,4 +134,5 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
         }
 
     }
+*/
 }

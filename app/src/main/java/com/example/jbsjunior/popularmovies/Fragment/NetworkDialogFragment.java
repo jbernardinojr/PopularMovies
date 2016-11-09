@@ -41,6 +41,7 @@ public class NetworkDialogFragment extends DialogFragment {
                             }
                         }
                 )
+                /*
                 .setNegativeButton(R.string.alert_dialog_cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -48,6 +49,7 @@ public class NetworkDialogFragment extends DialogFragment {
                             }
                         }
                 )
+                */
                 .create();
     }
 }
