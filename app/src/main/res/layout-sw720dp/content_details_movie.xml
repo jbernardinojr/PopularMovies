@@ -26,8 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txtMovieDescription"
-            android:textSize="18sp"
-            android:maxLines = "8"
+            android:textSize="14sp"
+            android:maxLines = "12"
             android:scrollbars = "vertical"
             android:scrollHorizontally="false"
             android:layout_marginTop="20dp"
@@ -43,14 +43,14 @@
             android:layout_width="240dp"
             android:layout_marginTop="50dp"
             android:padding="3dp"
-            android:layout_toLeftOf="@+id/txtMovieReleaseDateTitle"
-            android:layout_toStartOf="@+id/txtMovieReleaseDateTitle" />
+            android:layout_toLeftOf="@+id/txtMovieTitle"
+            android:layout_toStartOf="@+id/txtMovieTitle" />
 
         <TextView
             android:text="Release Date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtMovieReleaseDateTitle"
+            android:id="@+id/txtMovieTitle"
             android:textSize="18sp"
             android:textAlignment="center"
             android:layout_marginRight="39dp"
@@ -68,9 +68,9 @@
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:layout_marginBottom="23dp"
             android:foregroundGravity="center"
-            android:layout_above="@+id/txtMovieReleaseDateTitle"
-            android:layout_alignRight="@+id/txtMovieReleaseDateTitle"
-            android:layout_alignEnd="@+id/txtMovieReleaseDateTitle" />
+            android:layout_above="@+id/txtMovieTitle"
+            android:layout_alignRight="@+id/txtMovieTitle"
+            android:layout_alignEnd="@+id/txtMovieTitle" />
 
     </RelativeLayout>
 

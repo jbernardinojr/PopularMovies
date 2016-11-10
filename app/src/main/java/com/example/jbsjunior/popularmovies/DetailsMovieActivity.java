@@ -29,24 +29,26 @@ public class DetailsMovieActivity extends AppCompatActivity {
 
         if (bundle!=null) {
             this.movie = (Movie) bundle.getParcelable(Movie.PARCELABLE_KEY);
+            float avgRatingStars = ((float) movie.getVoteAverage() * 5) / 10;
 
             ScrollView sv = (ScrollView) findViewById(R.id.scroll_detail_activity);
-            TextView txtMovieReleaseDateTitle = (TextView) findViewById(R.id.txtMovieReleaseDateTitle);
+            TextView txtMovieTitle = (TextView) findViewById(R.id.txtMovieTitle);
+            TextView txtMovieDate = (TextView) findViewById(R.id.txtReleaseDate);
             TextView txtMovieDescription = (TextView) findViewById(R.id.txtMovieDescription);
             ImageView imgViewPoster = (ImageView) findViewById(R.id.imgDetailMoviePoster);
             RatingBar voteAvgBar = (RatingBar) findViewById(R.id.voteAverageBar);
 
             sv.setFillViewport(true);
-            txtMovieReleaseDateTitle.setText(movie.getOriginalTitle() + "\n"
-                    + movie.getReleaseDate().substring(0, 4));
+            txtMovieDate.setText(movie.getReleaseDate().substring(0, 4));
+            txtMovieTitle.setText(movie.getOriginalTitle());
             txtMovieDescription.setText(movie.getOverview());
             Picasso.with(DetailsMovieActivity.this)
                     .load(URLServer.URL_IMAGE_MOVIE + movie.getPosterPath())
                     .into(imgViewPoster);
 
-            float avgRatingStars = ((float) movie.getVoteAverage() * 5) / 10;
             voteAvgBar.setRating(avgRatingStars);
             txtMovieDescription.setMovementMethod(new ScrollingMovementMethod());
+
         }
     }
 
