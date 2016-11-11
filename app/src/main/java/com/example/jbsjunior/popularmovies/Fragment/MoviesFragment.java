@@ -79,7 +79,6 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
     }
 
     private void updateViewMode() {
-
         if (isOnline(getContext())) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String view_mode = prefs.getString(getString(R.string.pref_view_key), getString(R.string.pref_view_default));
@@ -98,7 +97,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
         gv.setAdapter(mMyCustomAdapter);
     }
 
-    public static boolean isOnline(Context context) {
+    private static boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);// Pego a conectividade do contexto
         NetworkInfo netInfo = cm.getActiveNetworkInfo();// Crio o objeto netInfo que recebe as informacoes da Network
         if ((netInfo != null) && (netInfo.isConnectedOrConnecting()) && (netInfo.isAvailable())) { // Se nao tem conectividade retorna false
@@ -107,7 +106,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
         return false;
     }
 
-    void showDialog() {
+    private void showDialog() {
         FragmentManager fm = getFragmentManager();
         mDialogFragment = NetworkDialogFragment.newInstance(R.string.no_network_conn_title);
         mDialogFragment.setTargetFragment(MoviesFragment.this, 0);

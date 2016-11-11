@@ -24,9 +24,7 @@ public class DetailsMovieActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         Bundle bundle = getIntent().getExtras();
-
         if (bundle!=null) {
             this.movie = (Movie) bundle.getParcelable(Movie.PARCELABLE_KEY);
             float avgRatingStars = ((float) movie.getVoteAverage() * 5) / 10;
@@ -48,7 +46,6 @@ public class DetailsMovieActivity extends AppCompatActivity {
 
             voteAvgBar.setRating(avgRatingStars);
             txtMovieDescription.setMovementMethod(new ScrollingMovementMethod());
-
         }
     }
 
