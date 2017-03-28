@@ -8,4 +8,9 @@
         <item>/movie/popular</item>
         <item>/movie/top_rated</item>
     </string-array>
+    <string-array name="menu_context">
+        <item>Adicionar aos Favoritos</item>
+    </string-array>
+
+
 </resources>

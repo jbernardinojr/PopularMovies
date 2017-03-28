@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:background="?attr/colorPrimary"
         android:numColumns="auto_fit"
+        android:longClickable="true"
         tools:listitem="@layout/movies_item"
         android:scrollingCache="false">
     </GridView>

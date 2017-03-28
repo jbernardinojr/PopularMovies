@@ -10,7 +10,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +58,8 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
         gv = (GridView) rootView.findViewById(R.id.gridview_movies);
 
+        registerForContextMenu(gv);
+
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -65,6 +69,21 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.gridview_movies) {
+            String[] menuItems = getResources().getStringArray(R.array.menu_context);
+            for (int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return super.onContextItemSelected(item);
     }
 
     @Override
