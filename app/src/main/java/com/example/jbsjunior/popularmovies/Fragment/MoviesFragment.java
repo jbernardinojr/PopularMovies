@@ -1,12 +1,10 @@
 package com.example.jbsjunior.popularmovies.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -18,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.example.jbsjunior.popularmovies.DetailsMovieActivity;
 import com.example.jbsjunior.popularmovies.Interface.MovieTaskCallBack;
@@ -26,6 +25,7 @@ import com.example.jbsjunior.popularmovies.MovieTask;
 import com.example.jbsjunior.popularmovies.MyCustomAdapter;
 import com.example.jbsjunior.popularmovies.R;
 import com.example.jbsjunior.popularmovies.data.MovieDb;
+import com.example.jbsjunior.popularmovies.util.Utils;
 
 import java.util.List;
 
@@ -39,6 +39,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
     private MyCustomAdapter mMyCustomAdapter;
     private NetworkDialogFragment mDialogFragment;
     private MovieDb movieDb;
+    private CoordinatorLayout coordinatorLayout;
 
     public MoviesFragment() {}
 
@@ -59,6 +60,8 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
+        coordinatorLayout = (CoordinatorLayout) container.findViewById(R.id.coordinatorLayout_main);
+
         gv = (GridView) rootView.findViewById(R.id.gridview_movies);
 
         registerForContextMenu(gv);
@@ -86,6 +89,24 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo menuInfo =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        int position = menuInfo.position;
+        long resp = 0L;
+
+        Movie movieFavorite = mMovies.get(position);
+        if (movieFavorite.isFavorite()){
+            movieFavorite.setFavorite(0);
+        } else {
+            movieFavorite.setFavorite(1);
+        }
+
+        resp = movieDb.atualizar(movieFavorite);
+        if (resp > 0) {
+            Toast.makeText(getContext(), "Filme adicionado com sucesso!", Toast.LENGTH_SHORT).show();
+        }
+
         return super.onContextItemSelected(item);
     }
 
@@ -101,7 +122,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
     }
 
     private void updateViewMode() {
-        if (isOnline(getContext())) {
+        if (Utils.isOnline(getContext())) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String view_mode = prefs.getString(getString(R.string.pref_view_key), getString(R.string.pref_view_default));
 
@@ -119,15 +140,6 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
         gv.setAdapter(mMyCustomAdapter);
     }
 
-    private static boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);// Pego a conectividade do contexto
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();// Crio o objeto netInfo que recebe as informacoes da Network
-        if ((netInfo != null) && (netInfo.isConnectedOrConnecting()) && (netInfo.isAvailable())) { // Se nao tem conectividade retorna false
-            return true;
-        }
-        return false;
-    }
-
     private void showDialog() {
         FragmentManager fm = getFragmentManager();
         mDialogFragment = NetworkDialogFragment.newInstance(R.string.no_network_conn_title);
@@ -143,17 +155,4 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
             updateViewMode();
         }
     }
-/*
-    public void doNegativeClick() {
-        if (mDialogFragment != null) {
-            mDialogFragment.dismiss();
-            try {
-                getActivity().finish();
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
-        }
-
-    }
-*/
 }

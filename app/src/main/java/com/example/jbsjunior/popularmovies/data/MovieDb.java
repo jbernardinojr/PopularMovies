@@ -33,6 +33,7 @@ public class MovieDb {
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_COUNT, movie.getVoteCount());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE, movie.isFavorite() ? 1 : 0);
+        cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
 
         return db.insert(MovieContract.MovieEntry.TABLE_NAME, null, cv);
@@ -48,9 +49,10 @@ public class MovieDb {
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH, movie.getPosterPath());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_COUNT, movie.getVoteCount());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE, movie.isFavorite() ? 1 : 0);
+        cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
 
-        return db.update(MovieContract.MovieEntry.TABLE_NAME, cv, " _id = ", new String[]{String.valueOf(movie.getId())});
+        return db.update(MovieContract.MovieEntry.TABLE_NAME, cv, " id = ? ", new String[]{String.valueOf(movie.getId())});
     }
 
     public int delete (Movie movie) {
@@ -70,6 +72,7 @@ public class MovieDb {
             MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH,
             MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_COUNT,
             MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE,
+            MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE,
             MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE
         };
 
@@ -87,7 +90,8 @@ public class MovieDb {
                 movie.setPosterPath(c.getString(5));
                 movie.setVoteCount(c.getLong(6));
                 movie.setFavorite(c.getInt(7));
-                movie.setReleaseDate(c.getString(8));
+                movie.setVoteAverage(c.getDouble(8));
+                movie.setReleaseDate(c.getString(9));
                 movies.add(movie);
             } while (c.moveToNext());
         }

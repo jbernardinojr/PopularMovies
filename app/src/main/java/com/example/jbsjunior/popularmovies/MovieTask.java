@@ -157,6 +157,7 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                     movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
                     movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_COUNT, movie.getVoteCount());
                     movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE, movie.isFavorite() ? 1 : 0);
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
                     movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
 
                     cVVector.add(movieValues);
