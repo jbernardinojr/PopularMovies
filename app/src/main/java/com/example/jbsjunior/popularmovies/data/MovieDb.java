@@ -32,7 +32,8 @@ public class MovieDb {
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH, movie.getPosterPath());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_COUNT, movie.getVoteCount());
-        cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE, movie.isFavorite() ? 1 : 0);
+        cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE, movie.isFavorite() ?
+                Movie.MOVIE_IS_FAVORITE : Movie.MOVIE_IS_NOT_FAVORITE);
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
 
@@ -48,11 +49,13 @@ public class MovieDb {
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, movie.getTitle());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH, movie.getPosterPath());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_COUNT, movie.getVoteCount());
-        cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE, movie.isFavorite() ? 1 : 0);
+        cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE, movie.isFavorite() ?
+                Movie.MOVIE_IS_FAVORITE : Movie.MOVIE_IS_NOT_FAVORITE);
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
         cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
 
-        return db.update(MovieContract.MovieEntry.TABLE_NAME, cv, " id = ? ", new String[]{String.valueOf(movie.getId())});
+        return db.update(MovieContract.MovieEntry.TABLE_NAME, cv, " id = ? ",
+                new String[]{String.valueOf(movie.getId())});
     }
 
     public int delete (Movie movie) {

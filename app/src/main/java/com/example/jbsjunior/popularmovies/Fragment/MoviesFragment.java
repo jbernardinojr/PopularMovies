@@ -97,9 +97,9 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
 
         Movie movieFavorite = mMovies.get(position);
         if (movieFavorite.isFavorite()){
-            movieFavorite.setFavorite(0);
+            movieFavorite.setFavorite(Movie.MOVIE_IS_NOT_FAVORITE);
         } else {
-            movieFavorite.setFavorite(1);
+            movieFavorite.setFavorite(Movie.MOVIE_IS_FAVORITE);
         }
 
         resp = movieDb.atualizar(movieFavorite);

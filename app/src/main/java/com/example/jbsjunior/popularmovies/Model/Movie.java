@@ -15,6 +15,9 @@ import java.util.List;
 
 public class Movie  implements Parcelable{
 
+    public static final int MOVIE_IS_NOT_FAVORITE = 0;
+    public static final int MOVIE_IS_FAVORITE = 1;
+
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
@@ -341,7 +344,7 @@ public class Movie  implements Parcelable{
      * if it's favorite or not
      */
     public boolean isFavorite() {
-        return getFavorite() == 1 ? true : false;
+        return getFavorite() == MOVIE_IS_FAVORITE ? true : false;
     }
 
     /*
