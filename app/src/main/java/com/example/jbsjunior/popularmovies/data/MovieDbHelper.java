@@ -26,7 +26,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieContract.MovieEntry.TABLE_NAME + " (" +
                 MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY," +
-                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL " +
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_COUNT + " TEXT NOT NULL, " +
@@ -34,9 +34,9 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_LANGUAGE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_MOVIE_TITLE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW + " TEXT NOT NULL, " +
-                MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL " +
-                MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP_PATH + " TEXT UNIQUE NOT NULL, " +
-                MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE + " REAL NOT NULL " +
+                MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP_PATH + " TEXT NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE + " REAL, " +
                 MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE+ " INTEGER DEFAULT 0 " +
                 " );";
 

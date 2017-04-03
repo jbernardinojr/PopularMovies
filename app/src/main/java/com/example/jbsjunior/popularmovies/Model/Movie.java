@@ -58,6 +58,8 @@ public class Movie  implements Parcelable{
     @Expose
     private double voteAverage;
 
+    private int favorite;
+
     /**
      *
      * @return
@@ -315,9 +317,36 @@ public class Movie  implements Parcelable{
         return 0;
     }
 
-    /*
-     * Parcelable routine
+    /**
+     *
+     * @return
+     * favorite flag
      */
+    private int getFavorite() {
+        return favorite;
+    }
+
+    /**
+     *
+     * @param flag
+     * Flag that indicate if is a user favorite movie
+     */
+    public void setFavorite(int flag) {
+        this.favorite = flag;
+    }
+
+    /**
+     *
+     * @return
+     * if it's favorite or not
+     */
+    public boolean isFavorite() {
+        return getFavorite() == 1 ? true : false;
+    }
+
+    /*
+        * Parcelable routine
+    */
 
     public static final String PARCELABLE_KEY = "movie";
 
@@ -331,6 +360,8 @@ public class Movie  implements Parcelable{
             return new Movie[size];
         }
     };
+
+    public Movie(){}
 
     private Movie(Parcel in) {
         originalTitle = in.readString();

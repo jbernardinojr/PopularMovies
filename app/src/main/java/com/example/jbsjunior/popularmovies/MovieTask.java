@@ -1,6 +1,7 @@
 package com.example.jbsjunior.popularmovies;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -8,6 +9,8 @@ import android.util.Log;
 
 import com.example.jbsjunior.popularmovies.Interface.MovieTaskCallBack;
 import com.example.jbsjunior.popularmovies.Model.Movie;
+import com.example.jbsjunior.popularmovies.data.MovieContract;
+import com.example.jbsjunior.popularmovies.data.MovieDb;
 import com.example.jbsjunior.popularmovies.server.ApiKey;
 import com.example.jbsjunior.popularmovies.server.URLServer;
 import com.google.gson.Gson;
@@ -26,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import static com.example.jbsjunior.popularmovies.server.URLServer.URL_MOVIE_POPULAR;
 import static com.example.jbsjunior.popularmovies.server.URLServer.URL_MOVIE_TOP_RATED;
@@ -41,11 +45,12 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
     private ProgressDialog dialog;
     private final MovieTaskCallBack mMovieTaskCallBack;
     private List<Movie> movies;
-
-    public MovieTask(Context context, MovieTaskCallBack movieTaskCallBack) {
+    private MovieDb movieDb;
+    public MovieTask(Context context, MovieTaskCallBack movieTaskCallBack, MovieDb db) {
         mContext = context;
         mMovieTaskCallBack = movieTaskCallBack;
         movies = null;
+        movieDb = db;
     }
 
     @Override
@@ -69,9 +74,9 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
         publishProgress(1);
         String sApi = ApiKey.API_KEY; //put you movie db API Key Here
         String sViewModeMovie = "";
-        if (params[0].equals("/movie/popular")) {
+        if ("/movie/popular".equals(params[0])) {
             sViewModeMovie =  URL_MOVIE_POPULAR;
-        } else if (params[0].equals("/movie/top_rated")) {
+        } else if ("/movie/top_rated".equals(params[0])) {
             sViewModeMovie =  URL_MOVIE_TOP_RATED;
         }
 
@@ -136,13 +141,38 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                 mMoviesJson = new JSONObject(movieJsonStr);
                 mRespArray = mMoviesJson.getJSONArray("results");
                 movies = new ArrayList<>();
+                Vector<ContentValues> cVVector = new Vector<ContentValues>(mRespArray.length());
 
                 for (int i=0; i < mRespArray.length(); i++) {
                     mJsonObjMovies = mRespArray.getJSONObject(i);
                     Movie movie = gson.fromJson(mJsonObjMovies.toString(), Movie.class);
+
+                    ContentValues movieValues = new ContentValues();
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP_PATH, movie.getBackdropPath());
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ORIGINAL_LANGUAGE, movie.getOriginalLanguage());
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW, movie.getOverview());
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POPULARITY, movie.getPopularity());
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, movie.getTitle());
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH, movie.getPosterPath());
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_COUNT, movie.getVoteCount());
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE, movie.isFavorite() ? 1 : 0);
+                    movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
+
+                    cVVector.add(movieValues);
                     movies.add(movie);
                     Log.d(LOG_TAG, movie.getTitle());
                 }
+
+                int inserted = 0;
+                // add to database
+                if ( cVVector.size() > 0 ) {
+                    ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                    cVVector.toArray(cvArray);
+                    inserted = movieDb.bulkInsert(cvArray);
+                }
+
+                Log.d(LOG_TAG, "MovieTask Complete. " + inserted + " Inserted");
                 publishProgress(7);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.toString());

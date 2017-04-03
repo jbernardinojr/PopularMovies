@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.jbsjunior.popularmovies.Fragment.MoviesFragment;
+import com.facebook.stetho.Stetho;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -17,12 +18,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this);
+        }
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                 .add(R.id.content_main, new MoviesFragment())
                     .commit();
         }
-
     }
 
     @Override

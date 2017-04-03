@@ -25,6 +25,7 @@ import com.example.jbsjunior.popularmovies.Model.Movie;
 import com.example.jbsjunior.popularmovies.MovieTask;
 import com.example.jbsjunior.popularmovies.MyCustomAdapter;
 import com.example.jbsjunior.popularmovies.R;
+import com.example.jbsjunior.popularmovies.data.MovieDb;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
     private GridView gv;
     private MyCustomAdapter mMyCustomAdapter;
     private NetworkDialogFragment mDialogFragment;
+    private MovieDb movieDb;
 
     public MoviesFragment() {}
 
@@ -44,6 +46,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        movieDb = new MovieDb(getContext());
     }
 
     @Override
@@ -102,7 +105,7 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String view_mode = prefs.getString(getString(R.string.pref_view_key), getString(R.string.pref_view_default));
 
-            MovieTask moviesTask = new MovieTask(getContext(), MoviesFragment.this);
+            MovieTask moviesTask = new MovieTask(getContext(), MoviesFragment.this, movieDb);
             moviesTask.execute(view_mode);
         } else {
             showDialog();
