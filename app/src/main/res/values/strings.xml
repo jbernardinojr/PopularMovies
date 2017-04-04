@@ -87,5 +87,6 @@
     <string name="alert_dialog_cancel">Cancel</string>
 
     <string name="add_movie_favorites">Adicionar aos favoritos</string>
+    <string name="remove_movie_favorites">Remover dos favoritos</string>
 
 </resources>

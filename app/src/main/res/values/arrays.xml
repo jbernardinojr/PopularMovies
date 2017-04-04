@@ -10,5 +10,6 @@
     </string-array>
     <string-array name="menu_context">
         <item>@string/add_movie_favorites</item>
+        <item>@string/remove_movie_favorites</item>
     </string-array>
 </resources>

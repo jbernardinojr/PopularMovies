@@ -96,15 +96,18 @@ public class MoviesFragment extends Fragment implements MovieTaskCallBack {
         long resp = 0L;
 
         Movie movieFavorite = mMovies.get(position);
-        if (movieFavorite.isFavorite()){
-            movieFavorite.setFavorite(Movie.MOVIE_IS_NOT_FAVORITE);
-        } else {
+        if (item.getItemId()==0){
             movieFavorite.setFavorite(Movie.MOVIE_IS_FAVORITE);
+        } else if (item.getItemId()==1){
+            movieFavorite.setFavorite(Movie.MOVIE_IS_NOT_FAVORITE);
         }
 
         resp = movieDb.atualizar(movieFavorite);
         if (resp > 0) {
-            Toast.makeText(getContext(), "Filme adicionado com sucesso!", Toast.LENGTH_SHORT).show();
+            if (movieFavorite.isFavorite())
+                Toast.makeText(getContext(), "Filme adicionado aos favoritos!", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getContext(), "Filme removido dos favoritos!", Toast.LENGTH_SHORT).show();
         }
 
         return super.onContextItemSelected(item);
