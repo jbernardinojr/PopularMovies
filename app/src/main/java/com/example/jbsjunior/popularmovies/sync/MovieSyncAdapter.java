@@ -1,18 +1,23 @@
-package com.example.jbsjunior.popularmovies;
+package com.example.jbsjunior.popularmovies.sync;
 
-import android.app.ProgressDialog;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.AbstractThreadedSyncAdapter;
+import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SyncResult;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
-import com.example.jbsjunior.popularmovies.Interface.MovieTaskCallBack;
 import com.example.jbsjunior.popularmovies.Model.Movie;
+import com.example.jbsjunior.popularmovies.R;
 import com.example.jbsjunior.popularmovies.data.MovieContract;
-import com.example.jbsjunior.popularmovies.data.MovieDb;
 import com.example.jbsjunior.popularmovies.server.ApiKey;
 import com.example.jbsjunior.popularmovies.server.URLServer;
+import com.example.jbsjunior.popularmovies.util.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -27,56 +32,38 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 import static com.example.jbsjunior.popularmovies.server.URLServer.URL_MOVIE_POPULAR;
 import static com.example.jbsjunior.popularmovies.server.URLServer.URL_MOVIE_TOP_RATED;
+import static com.example.jbsjunior.popularmovies.util.Utils.MOVIE_POPULAR_PREFERENCE;
+import static com.example.jbsjunior.popularmovies.util.Utils.MOVIE_TOP_RATED_PREFERENCE;
 
 /**
- * Created by JBSJunior on 26/10/2016.
+ * Created by JBSJunior on 05/04/2017.
  */
 
-public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
+public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
-    private static final String LOG_TAG = "MoviesTask";
-    private final Context mContext;
-    private ProgressDialog dialog;
-    private final MovieTaskCallBack mMovieTaskCallBack;
-    private List<Movie> movies;
-    private MovieDb movieDb;
-    public MovieTask(Context context, MovieTaskCallBack movieTaskCallBack, MovieDb db) {
-        mContext = context;
-        mMovieTaskCallBack = movieTaskCallBack;
-        movies = null;
-        movieDb = db;
+    private final static String LOG_TAG = MovieSyncAdapter.class.getName();
+
+    public MovieSyncAdapter(Context context, boolean autoInitialize) {
+        super(context, autoInitialize);
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        if (movies!=null) {
-            movies.clear();
-        }
-        dialog = ProgressDialog.show(mContext, "Wait", "Downloading...");
-    }
-
-    @Override
-    protected List<Movie> doInBackground(String... params) {
-
+    public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
         String movieJsonStr;
 
-        publishProgress(1);
         String sApi = ApiKey.API_KEY; //put your movie db API Key Here
         String sViewModeMovie = "";
-        if ("/movie/popular".equals(params[0])) {
+        if (MOVIE_POPULAR_PREFERENCE.equals(Utils.getPreferredView(getContext()))) {
             sViewModeMovie =  URL_MOVIE_POPULAR;
-        } else if ("/movie/top_rated".equals(params[0])) {
+        } else if (MOVIE_TOP_RATED_PREFERENCE.equals(Utils.getPreferredView(getContext()))) {
             sViewModeMovie =  URL_MOVIE_TOP_RATED;
         }
 
@@ -90,7 +77,6 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
         String sUri = uriBuilder.toString();
 
         Log.d(LOG_TAG, sUri);
-        publishProgress(2);
 
         URL url = null;
         try {
@@ -106,13 +92,13 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
-            publishProgress(3);
             inputStream = urlConnection.getInputStream();
 
             if (inputStream == null) {
                 // Nothing to do.
-                return null;
+                throw new NullPointerException("inputStream is null");
             }
+
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
@@ -122,13 +108,11 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                 // buffer for debugging.
                 buffer.append(line);
             }
-            publishProgress(5);
 
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
-                return null;
+                throw new NullPointerException("Buffer length is 0");
             }
-            publishProgress(6);
             movieJsonStr = buffer.toString();
 
             try {
@@ -140,7 +124,6 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                 Gson gson = gsonBuilder.create();
                 mMoviesJson = new JSONObject(movieJsonStr);
                 mRespArray = mMoviesJson.getJSONArray("results");
-                movies = new ArrayList<>();
                 Vector<ContentValues> cVVector = new Vector<ContentValues>(mRespArray.length());
 
                 for (int i=0; i < mRespArray.length(); i++) {
@@ -161,7 +144,6 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                     movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
 
                     cVVector.add(movieValues);
-                    movies.add(movie);
                     Log.d(LOG_TAG, movie.getTitle());
                 }
 
@@ -170,15 +152,14 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                 if ( cVVector.size() > 0 ) {
                     ContentValues[] cvArray = new ContentValues[cVVector.size()];
                     cVVector.toArray(cvArray);
-                    inserted = movieDb.bulkInsert(cvArray);
+                    inserted = getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
                 }
 
                 Log.d(LOG_TAG, "MovieTask Complete. " + inserted + " Inserted");
-                publishProgress(7);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.toString());
             }
-        } catch (IOException|NullPointerException e) {
+        } catch (IOException |NullPointerException e) {
             Log.e(LOG_TAG, "Error ", e);
         } finally {
             if (urlConnection != null) {
@@ -192,13 +173,76 @@ public class MovieTask extends AsyncTask<String, Object, List<Movie>> {
                 }
             }
         }
-        return movies;
     }
 
-    @Override
-    protected void onPostExecute(List<Movie> retMovies) {
-        mMovieTaskCallBack.onTaskCallBack(retMovies);
-        dialog.dismiss();
+    /**
+     * Helper method to have the sync adapter sync immediately
+     * @param context The context used to access the account service
+     */
+    public static void syncImmediately(Context context) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(getSyncAccount(context),
+                context.getString(R.string.content_authority), bundle);
     }
 
+    /**
+     * Helper method to get the fake account to be used with SyncAdapter, or make a new one
+     * if the fake account doesn't exist yet.  If we make a new account, we call the
+     * onAccountCreated method so we can initialize things.
+     *
+     * @param context The context used to access the account service
+     * @return a fake account.
+     */
+    public static Account getSyncAccount(Context context) {
+        // Get an instance of the Android account manager
+        AccountManager accountManager =
+                (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
+
+        // Create the account type and default account
+        Account newAccount = new Account(
+                context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
+
+        // If the password doesn't exist, the account doesn't exist
+        if ( null == accountManager.getPassword(newAccount) ) {
+
+        /*
+         * Add the account and account type, no password or user data
+         * If successful, return the Account object, otherwise report an error.
+         */
+            if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
+                return null;
+            }
+            /*
+             * If you don't set android:syncable="true" in
+             * in your <provider> element in the manifest,
+             * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
+             * here.
+             */
+
+            onAccountCreated(newAccount, context);
+        }
+        return newAccount;
+    }
+
+    private static void onAccountCreated(Account newAccount, Context context) {
+        /*
+         * Since we've created an account
+         */
+
+        //ToDo verificar possibilidade do sync automático
+
+       // SunshineSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+
+        /*
+         * Without calling setSyncAutomatically, our periodic sync will not be enabled.
+         */
+        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
+
+        /*
+         * Finally, let's do a sync to get things started
+         */
+        syncImmediately(context);
+    }
 }

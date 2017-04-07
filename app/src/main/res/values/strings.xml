@@ -89,4 +89,12 @@
     <string name="add_movie_favorites">Adicionar aos favoritos</string>
     <string name="remove_movie_favorites">Remover dos favoritos</string>
 
+    <!-- Account type (for sync-adapter authenticator) -->
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">jbsjunior.example.com</string>
+    <string name="content_authority">com.example.jbsjunior.popularmovies</string>
+
+    <string name="movie_add_favorite">Filme adicionado aos favoritos!</string>
+    <string name="movie_remove_favorite">Filme removido dos favoritos!</string>
+
 </resources>

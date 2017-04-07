@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,10 +17,20 @@ import android.support.annotation.Nullable;
 public class MovieProvider extends ContentProvider {
 
     static final int MOVIE = 100;
+    static final int MOVIE_WITH_ID = 101;
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MovieDbHelper mOpenHelper;
+    private static final SQLiteQueryBuilder sqlMovieQueryBuilder;
+
+    static{
+        sqlMovieQueryBuilder = new SQLiteQueryBuilder();
+
+        //This is an inner join which looks like
+        //weather INNER JOIN location ON weather.location_id = location._id
+        sqlMovieQueryBuilder.setTables(MovieContract.MovieEntry.TABLE_NAME);
+    }
 
 
     @Override
@@ -28,10 +39,40 @@ public class MovieProvider extends ContentProvider {
         return true;
     }
 
-    @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        return null;
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+                        String sortOrder) {
+
+        Cursor retCursor;
+
+        switch (sUriMatcher.match(uri)) {
+            case MOVIE: {
+                retCursor = sqlMovieQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+            case MOVIE_WITH_ID: {
+                retCursor = sqlMovieQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return retCursor;
+
     }
 
     @Nullable
@@ -150,6 +191,7 @@ public class MovieProvider extends ContentProvider {
         final String authority = MovieContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, MovieContract.PATH_MOVIES, MOVIE);
+        matcher.addURI(authority, MovieContract.PATH_MOVIES + "/#", MOVIE_WITH_ID);
 
         return matcher;
     }
