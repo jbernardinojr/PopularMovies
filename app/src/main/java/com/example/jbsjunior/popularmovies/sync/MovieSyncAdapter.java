@@ -7,8 +7,10 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -47,6 +49,14 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final static String LOG_TAG = MovieSyncAdapter.class.getName();
 
+    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+
+    // Interval at which to sync with the weather, in milliseconds.
+    // 60 seconds (1 minute)  180 = 3 hours
+    public static final int HOUR_IN_SECS = 60 * 60; //hours in seconds
+    public static final int SYNC_INTERVAL = HOUR_IN_SECS * 3; //3 horas
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+
     public MovieSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
     }
@@ -62,9 +72,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         String sApi = ApiKey.API_KEY; //put your movie db API Key Here
         String sViewModeMovie = "";
         if (MOVIE_POPULAR_PREFERENCE.equals(Utils.getPreferredView(getContext()))) {
-            sViewModeMovie =  URL_MOVIE_POPULAR;
+            sViewModeMovie = URL_MOVIE_POPULAR;
         } else if (MOVIE_TOP_RATED_PREFERENCE.equals(Utils.getPreferredView(getContext()))) {
-            sViewModeMovie =  URL_MOVIE_TOP_RATED;
+            sViewModeMovie = URL_MOVIE_TOP_RATED;
         }
 
         Uri uriBuilder = Uri
@@ -75,6 +85,15 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Construct the URL for the TheMovieDB query
         String sUri = uriBuilder.toString();
+
+        //Apaga todos os dados antes de gravar os novos
+        if (!Utils.MOVIE_FAVORITE_PREFERENCE.equals(Utils.getPreferredView(getContext()))) {
+            getContext().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, "1", null);
+        } else {
+            getContext().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI,
+                    "favorite <> ?", new String[] {"1"});
+        }
+
 
         Log.d(LOG_TAG, sUri);
 
@@ -226,6 +245,25 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         return newAccount;
     }
 
+    /**
+     * Helper method to schedule the sync adapter periodic execution
+     */
+    public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
+        Account account = getSyncAccount(context);
+        String authority = context.getString(R.string.content_authority);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // we can enable inexact timers in our periodic sync
+            SyncRequest request = new SyncRequest.Builder().
+                    syncPeriodic(syncInterval, flexTime).
+                    setSyncAdapter(account, authority).
+                    setExtras(new Bundle()).build();
+            ContentResolver.requestSync(request);
+        } else {
+            ContentResolver.addPeriodicSync(account,
+                    authority, new Bundle(), syncInterval);
+        }
+    }
+
     private static void onAccountCreated(Account newAccount, Context context) {
         /*
          * Since we've created an account
@@ -233,7 +271,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
         //ToDo verificar possibilidade do sync automático
 
-       // SunshineSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+        MovieSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
 
         /*
          * Without calling setSyncAutomatically, our periodic sync will not be enabled.
@@ -244,5 +282,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
          * Finally, let's do a sync to get things started
          */
         syncImmediately(context);
+    }
+
+    public static void initializeSyncAdapter(Context context) {
+        getSyncAccount(context);
     }
 }

@@ -8,9 +8,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.jbsjunior.popularmovies.Fragment.MoviesFragment;
+import com.example.jbsjunior.popularmovies.sync.MovieSyncAdapter;
+import com.example.jbsjunior.popularmovies.util.Utils;
 import com.facebook.stetho.Stetho;
 
 public class MainActivity extends AppCompatActivity {
+
+    private String mViewMode;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,14 +23,31 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mViewMode = Utils.getPreferredView(this);
+
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                .add(R.id.content_main, new MoviesFragment())
+                .add(R.id.content_main, new MoviesFragment(), MoviesFragment.MOVIE_TAG)
                     .commit();
+        }
+       // MoviesFragment mf = (MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies);
+        MovieSyncAdapter.initializeSyncAdapter(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String viewMode = Utils.getPreferredView(this);
+        if (viewMode != null && !viewMode.equals(mViewMode)) {
+            MoviesFragment mf = (MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.content_main);
+            if (null != mf) {
+                mf.onViewModeChanged();
+            }
+            mViewMode = viewMode;
         }
     }
 

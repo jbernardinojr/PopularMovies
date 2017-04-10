@@ -4,11 +4,9 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -41,6 +39,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     private static final String LOG_TAG = MoviesFragment.class.getSimpleName();
     private static final String POSITION_KEY = "position";
     private static final int MOVIE_LOADER = 0;
+    public static final String MOVIE_TAG = "MovieFragment";
 
     private GridView gv;
     private MoviesAdapter mMoviesAdapter;
@@ -88,19 +87,24 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         setHasOptionsMenu(true);
         mUri = MovieContract.MovieEntry.CONTENT_URI;
         mCr = getContext().getContentResolver();
+        updateViewMode();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        updateViewMode();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
-        Cursor cursor = mCr.query(MovieContract.MovieEntry.CONTENT_URI, null, "", null, null);
+        Cursor cursor;
+        if (!Utils.MOVIE_FAVORITE_PREFERENCE.equals(Utils.getPreferredView(getContext()))) {
+            cursor = mCr.query(MovieContract.MovieEntry.CONTENT_URI, null, "", null, null);
+        } else {
+            cursor = mCr.query(MovieContract.MovieEntry.CONTENT_URI, MOVIE_COLUMNS, "favorite = ?", new String[]{"1"}, "");
+        }
 
         mMoviesAdapter = new MoviesAdapter(getActivity(), cursor, 0);
         gv = (GridView) rootView.findViewById(R.id.gridview_movies);
@@ -186,8 +190,6 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     private void updateViewMode() {
         if (Utils.isOnline(getContext())) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String view_mode = prefs.getString(getString(R.string.pref_view_key), getString(R.string.pref_view_default));
             MovieSyncAdapter.syncImmediately(getActivity());
         } else {
             showDialog();
@@ -259,5 +261,10 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
             outState.putInt(POSITION_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    public void onViewModeChanged() {
+        updateViewMode();
+        getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
 }

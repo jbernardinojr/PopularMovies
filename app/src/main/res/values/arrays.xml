@@ -3,10 +3,12 @@
     <string-array name="pref_view_options">
         <item>Popular</item>
         <item>Top Rated</item>
+        <item>Favorite</item>
     </string-array>
     <string-array name="pref_view_values">
         <item>/movie/popular</item>
         <item>/movie/top_rated</item>
+        <item>/movie/favorite</item>
     </string-array>
     <string-array name="menu_context">
         <item>@string/add_movie_favorites</item>

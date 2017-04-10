@@ -21,6 +21,7 @@ public class Utils {
 
     public static final String MOVIE_POPULAR_PREFERENCE = "/movie/popular";
     public static final String MOVIE_TOP_RATED_PREFERENCE = "/movie/top_rated";
+    public static final String MOVIE_FAVORITE_PREFERENCE = "/movie/favorite";
 
 
     public static boolean isOnline(Context context) {
