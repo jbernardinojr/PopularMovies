@@ -6,10 +6,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitle</item>
     </style>
 
     <style name="myDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="ActionBarTitle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>
