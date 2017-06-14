@@ -8,17 +8,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.example.jbsjunior.popularmovies.Interface.ReviewTaskCallBack;
 import com.example.jbsjunior.popularmovies.Model.Movie;
+import com.example.jbsjunior.popularmovies.Model.Review;
 import com.example.jbsjunior.popularmovies.R;
+import com.example.jbsjunior.popularmovies.adapter.ReviewsAdapter;
+import com.example.jbsjunior.popularmovies.sync.ReviewSync;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ReviewFragment extends Fragment {
+public class ReviewFragment extends Fragment implements ReviewTaskCallBack {
 
     private static Movie movie;
     private static int position;
+    private ListView listReview;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -46,7 +54,23 @@ public class ReviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d("Bernardino", "ReviewFragment");
-        return inflater.inflate(R.layout.fragment_review, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_review, container, false);
+
+        listReview = (ListView) view.findViewById(R.id.lt_review);
+        ReviewSync reviewSync = new ReviewSync(this);
+        reviewSync.execute(movie.getId());
+
+        return view;
     }
 
+    @Override
+    public void onTaskCompleted(List<Review> review) {
+
+        if (review.size()>0) {
+            ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getContext(), review);
+            listReview.setAdapter(reviewsAdapter);
+        }
+
+    }
 }
