@@ -85,7 +85,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // Construct the URL for the TheMovieDB query
         String sUri = uriBuilder.toString();
-
+        Log.d("Bernardino", "URI="+sUri);
         //Apaga todos os dados antes de gravar os novos
         if (!Utils.MOVIE_FAVORITE_PREFERENCE.equals(Utils.getPreferredView(getContext()))) {
             getContext().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, "1", null);

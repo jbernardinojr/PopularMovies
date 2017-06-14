@@ -97,4 +97,8 @@
     <string name="movie_add_favorite">Filme adicionado aos favoritos!</string>
     <string name="movie_remove_favorite">Filme removido dos favoritos!</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="trailerYoutube">Trailer</string>
+
 </resources>

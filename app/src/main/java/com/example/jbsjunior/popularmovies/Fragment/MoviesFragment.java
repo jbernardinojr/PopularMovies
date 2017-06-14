@@ -114,7 +114,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), DetailsMovieActivity.class);
+                Intent intent = new Intent(getContext(), DetailsMovieActivity.class);
                 intent.putExtra(Movie.PARCELABLE_KEY, mMoviesAdapter.get(position));
                 startActivity(intent);
             }

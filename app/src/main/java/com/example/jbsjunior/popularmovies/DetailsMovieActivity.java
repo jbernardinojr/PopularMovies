@@ -1,9 +1,12 @@
 package com.example.jbsjunior.popularmovies;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
@@ -16,37 +19,52 @@ import com.squareup.picasso.Picasso;
 public class DetailsMovieActivity extends AppCompatActivity {
 
     private Movie movie;
+    private TabLayout tabs;
+    private ViewPager pager;
+    private TabsPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_movie);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null) {
-            this.movie = (Movie) bundle.getParcelable(Movie.PARCELABLE_KEY);
-            float avgRatingStars = ((float) movie.getVoteAverage() * 5) / 10;
-
-            ScrollView sv = (ScrollView) findViewById(R.id.scroll_detail_activity);
-            TextView txtMovieTitle = (TextView) findViewById(R.id.txtMovieTitle);
-            TextView txtMovieDate = (TextView) findViewById(R.id.txtReleaseDate);
-            TextView txtMovieDescription = (TextView) findViewById(R.id.txtMovieDescription);
-            ImageView imgViewPoster = (ImageView) findViewById(R.id.imgDetailMoviePoster);
-            RatingBar voteAvgBar = (RatingBar) findViewById(R.id.voteAverageBar);
-
-            sv.setFillViewport(true);
-            txtMovieDate.setText(movie.getReleaseDate().substring(0, 4));
-            txtMovieTitle.setText(movie.getOriginalTitle());
-            txtMovieDescription.setText(movie.getOverview());
-            Picasso.with(DetailsMovieActivity.this)
-                    .load(URLServer.URL_IMAGE_MOVIE + movie.getPosterPath())
-                    .into(imgViewPoster);
-
-            voteAvgBar.setRating(avgRatingStars);
-            txtMovieDescription.setMovementMethod(new ScrollingMovementMethod());
+            this.movie = bundle.getParcelable(Movie.PARCELABLE_KEY);
         }
+
+        tabs = (TabLayout) findViewById(R.id.tabs);
+        pager = (ViewPager) findViewById(R.id.pager);
+        adapter = new TabsPagerAdapter(getSupportFragmentManager(), movie);
+
+        pager.setAdapter(adapter);
+        tabs.setupWithViewPager(pager);
+        setupTabIcons();
+    }
+
+    /**
+     * Adding custom view to tab
+     */
+    private void setupTabIcons() {
+
+        TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabOne.setText("Overview");
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_overview, 0, 0);
+        tabs.getTabAt(0).setCustomView(tabOne);
+
+        TextView tabTwo = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabTwo.setText("Trailer");
+        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_launcher, 0, 0);
+        tabs.getTabAt(1).setCustomView(tabTwo);
+
+        TextView tabThree = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabThree.setText("Reviews");
+        tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_review, 0, 0);
+        tabs.getTabAt(2).setCustomView(tabThree);
     }
 
 }
