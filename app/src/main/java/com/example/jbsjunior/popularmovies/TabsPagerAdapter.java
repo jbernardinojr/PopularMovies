@@ -10,6 +10,9 @@ import com.example.jbsjunior.popularmovies.Fragment.ReviewFragment;
 import com.example.jbsjunior.popularmovies.Fragment.TrailerFragment;
 import com.example.jbsjunior.popularmovies.Model.Movie;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by junior on 08/06/17.
  */
@@ -18,10 +21,15 @@ import com.example.jbsjunior.popularmovies.Model.Movie;
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     Movie movie;
+    List<String> mFragmentList;
 
     public TabsPagerAdapter(FragmentManager fm, Movie movie) {
         super(fm);
         this.movie = movie;
+        mFragmentList = new ArrayList<>();
+        mFragmentList.add("Overview");
+        mFragmentList.add("Trailer");
+        mFragmentList.add("Reviews");
     }
 
     @Override
@@ -48,11 +56,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return mFragmentList.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "TAB " + (position + 1);
+        return mFragmentList.get(position);
     }
 }

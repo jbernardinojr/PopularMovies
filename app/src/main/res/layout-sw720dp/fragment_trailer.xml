@@ -5,15 +5,16 @@
     android:background="@color/colorAccent"
     tools:context="com.example.jbsjunior.popularmovies.Fragment.TrailerFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/tv_video_trailer"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:linksClickable="true"
-        android:text="Teste link"
         android:background="@color/colorAccent"
         android:textColor="@color/white"
-        android:textAppearance="?android:attr/textAppearance" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Teste link"/>
 
 </FrameLayout>

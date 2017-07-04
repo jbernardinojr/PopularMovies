@@ -1,6 +1,7 @@
 package com.example.jbsjunior.popularmovies.adapter;
 
 import android.content.Context;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ public class ReviewsAdapter extends BaseAdapter{
 
         mUserName = (TextView) returnView.findViewById(R.id.tv_user_name);
         mUserReview = (TextView) returnView.findViewById(R.id.tv_user_review);
+        mUserReview.setMovementMethod(new ScrollingMovementMethod());
 
         mUserName.setText(review.getAuthor());
         mUserReview.setText(review.getContent());

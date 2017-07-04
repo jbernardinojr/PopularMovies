@@ -1,6 +1,9 @@
 package com.example.jbsjunior.popularmovies.Fragment;
 
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -64,7 +67,6 @@ public class OverviewFragment extends Fragment {
             ImageView imgViewPoster = (ImageView) view.findViewById(R.id.imgDetailMoviePoster);
             RatingBar voteAvgBar = (RatingBar) view.findViewById(R.id.voteAverageBar);
 
-            sv.setFillViewport(true);
             txtMovieDate.setText(movie.getReleaseDate().substring(0, 4));
             txtMovieTitle.setText(movie.getTitle());
             txtMovieDescription.setText(movie.getOverview());
@@ -73,6 +75,10 @@ public class OverviewFragment extends Fragment {
                     .into(imgViewPoster);
 
             voteAvgBar.setRating(avgRatingStars);
+            LayerDrawable stars = (LayerDrawable) voteAvgBar.getProgressDrawable();
+            stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+
+
             txtMovieDescription.setMovementMethod(new ScrollingMovementMethod());
         }
 
