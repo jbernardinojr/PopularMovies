@@ -249,7 +249,10 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
             gv.smoothScrollToPosition(mPosition);
         }
         mMoviesAdapter.swapCursor(cursor);
-        mProgressDialog.dismiss();
+
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
     }
 
     @Override

@@ -9,10 +9,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -60,10 +62,11 @@ public class OverviewFragment extends Fragment {
         if (movie != null) {
             float avgRatingStars = ((float) movie.getVoteAverage() * 5) / 10;
 
-            ScrollView sv = (ScrollView) view.findViewById(R.id.scroll_detail);
+            final ScrollView sv = (ScrollView) view.findViewById(R.id.scroll_detail);
             TextView txtMovieTitle = (TextView) view.findViewById(R.id.txtMovieTitle);
             TextView txtMovieDate = (TextView) view.findViewById(R.id.txtReleaseDate);
-            TextView txtMovieDescription = (TextView) view.findViewById(R.id.txtMovieDescription);
+            final TextView txtMovieDescription = (TextView) view.findViewById(R.id.txtMovieDescription);
+            txtMovieDescription.setMovementMethod(new ScrollingMovementMethod());
             ImageView imgViewPoster = (ImageView) view.findViewById(R.id.imgDetailMoviePoster);
             RatingBar voteAvgBar = (RatingBar) view.findViewById(R.id.voteAverageBar);
 
@@ -78,8 +81,27 @@ public class OverviewFragment extends Fragment {
             LayerDrawable stars = (LayerDrawable) voteAvgBar.getProgressDrawable();
             stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
 
+            sv.setOnTouchListener(new View.OnTouchListener() {
 
-            txtMovieDescription.setMovementMethod(new ScrollingMovementMethod());
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    txtMovieDescription.getParent().requestDisallowInterceptTouchEvent(false);
+
+                    return false;
+                }
+            });
+
+            txtMovieDescription.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    txtMovieDescription.getParent().requestDisallowInterceptTouchEvent(true);
+
+                    return false;
+                }
+            });
         }
 
         return view;

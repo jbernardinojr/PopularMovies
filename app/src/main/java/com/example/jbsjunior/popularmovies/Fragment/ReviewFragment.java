@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.jbsjunior.popularmovies.Interface.ReviewTaskCallBack;
 import com.example.jbsjunior.popularmovies.Model.Movie;
@@ -27,6 +28,7 @@ public class ReviewFragment extends Fragment implements ReviewTaskCallBack {
     private static Movie movie;
     private static int position;
     private ListView listReview;
+    private TextView txtReview;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -57,6 +59,7 @@ public class ReviewFragment extends Fragment implements ReviewTaskCallBack {
 
         View view = inflater.inflate(R.layout.fragment_review, container, false);
 
+        txtReview = (TextView) view.findViewById(R.id.tv_no_review);
         listReview = (ListView) view.findViewById(R.id.lt_review);
         ReviewSync reviewSync = new ReviewSync(this);
         reviewSync.execute(movie.getId());
@@ -70,7 +73,9 @@ public class ReviewFragment extends Fragment implements ReviewTaskCallBack {
         if (review.size()>0) {
             ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getContext(), review);
             listReview.setAdapter(reviewsAdapter);
+        } else {
+            txtReview.setVisibility(View.VISIBLE);
+            listReview.setVisibility(View.GONE);
         }
-
     }
 }

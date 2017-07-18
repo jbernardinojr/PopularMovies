@@ -31,7 +31,6 @@ public class TrailerFragment extends Fragment implements VideoTaskCallBack{
     private static Movie movie;
     private static int position;
     private TextView txtVideoTrailer;
-    SpannableString spannableStringLinkYoutube;
 
     public TrailerFragment() {
         // Required empty public constructor
@@ -59,11 +58,7 @@ public class TrailerFragment extends Fragment implements VideoTaskCallBack{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trailer, container, false);
-
-        spannableStringLinkYoutube = new SpannableString(movie.getTitle());
-
         txtVideoTrailer = (TextView) view.findViewById(R.id.tv_video_trailer);
-//        txtVideoTrailer.setMovementMethod(LinkMovementMethod.getInstance());
 
         VideoSync videoSync = new VideoSync(this);
         videoSync.execute(movie.getId());
@@ -74,19 +69,21 @@ public class TrailerFragment extends Fragment implements VideoTaskCallBack{
 
     @Override
     public void onTaskCompleted(final String key) {
-        if (txtVideoTrailer!=null){
 
-            ClickableSpan clickableSpan = new ClickableSpan() {
+        StringBuffer sb = new StringBuffer(64);
+
+        if (txtVideoTrailer!=null){
+            sb.append(getResources().getString(R.string.click_trailer) + "\n");
+            sb.append(movie.getTitle());
+            txtVideoTrailer.setText(sb.toString());
+            txtVideoTrailer.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View textView) {
+                public void onClick(View view) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(URLServer.URL_MOVIE_YOUTUBE_WATCH + key)));
                 }
-            };
-
-            spannableStringLinkYoutube.setSpan(clickableSpan, spannableStringLinkYoutube.length(),
-                    spannableStringLinkYoutube.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            txtVideoTrailer.setText(spannableStringLinkYoutube, TextView.BufferType.SPANNABLE);
-            txtVideoTrailer.setMovementMethod(LinkMovementMethod.getInstance());
+            });
+        } else {
+            txtVideoTrailer.setText(R.string.trailer_no_avaiable);
         }
     }
 }

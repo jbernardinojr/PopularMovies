@@ -3,8 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.jbsjunior.popularmovies.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_view_popular"
+        android:icon="@mipmap/popular"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="@string/action_view_mode_popular"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_view_top_rated"
+        android:icon="@mipmap/toprated"
+        android:orderInCategory="100"
+        android:title="@string/action_view_mode_top_rated"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_view_favorite"
+        android:icon="@mipmap/favorite"
+        android:orderInCategory="100"
+        android:title="@string/action_view_mode_favorite"
+        app:showAsAction="ifRoom" />
 </menu>
