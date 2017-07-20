@@ -107,5 +107,6 @@
     <string name="action_view_mode_top_rated">Top Rated</string>
     <string name="action_view_mode_favorite">Favorite</string>
     <string name="click_trailer">Click  Here to Open Trailer</string>
+    <string name="has_no_favorite">Has no favorites movies</string>
 
 </resources>

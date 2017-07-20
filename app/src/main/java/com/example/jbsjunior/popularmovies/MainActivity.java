@@ -1,15 +1,21 @@
 package com.example.jbsjunior.popularmovies;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.jbsjunior.popularmovies.Fragment.MoviesFragment;
+import com.example.jbsjunior.popularmovies.Model.Movie;
+import com.example.jbsjunior.popularmovies.data.MovieContract;
 import com.example.jbsjunior.popularmovies.sync.MovieSyncAdapter;
 import com.example.jbsjunior.popularmovies.util.Utils;
 import com.facebook.stetho.Stetho;
@@ -73,16 +79,17 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Intent intentSettings = new Intent(this, SettingsActivity.class);
-
-        SharedPreferences.Editor prefEditor;
-        prefEditor = prefs.edit();
+        SharedPreferences.Editor prefEditor = prefs.edit();
 
         switch (id) {
             case R.id.action_view_favorite:
                 prefEditor.putString(getApplicationContext().getString(R.string.pref_view_key), Utils.MOVIE_FAVORITE_PREFERENCE);
                 prefEditor.commit();
-                onResume();
+                if (hasFavorite()) {
+                    onResume();
+                } else {
+                    Toast.makeText(getApplicationContext(),getApplicationContext().getString(R.string.has_no_favorite), Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.action_view_top_rated:
                 prefEditor.putString(getApplicationContext().getString(R.string.pref_view_key), Utils.MOVIE_TOP_RATED_PREFERENCE);
@@ -97,5 +104,18 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean hasFavorite() {
+        ContentResolver cr = getContentResolver();
+        String [] favoriteColumn = {MovieContract.MovieEntry.COLUMN_MOVIE_ID};
+        String [] favoriteFlag = {"1"};
+        Cursor c = cr.query(MovieContract.MovieEntry.CONTENT_URI, favoriteColumn, MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE + " = ?", favoriteFlag, "");
+        if (c.getCount() == 0) {
+            c.close();
+            return false;
+        }
+        c.close();
+        return true;
     }
 }
