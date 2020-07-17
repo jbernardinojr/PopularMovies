@@ -1,10 +1,9 @@
 package com.example.jbsjunior.popularmovies;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.jbsjunior.popularmovies.Fragment.DetailPageLayout;
 import com.example.jbsjunior.popularmovies.Fragment.OverviewFragment;
 import com.example.jbsjunior.popularmovies.Fragment.ReviewFragment;
 import com.example.jbsjunior.popularmovies.Fragment.TrailerFragment;

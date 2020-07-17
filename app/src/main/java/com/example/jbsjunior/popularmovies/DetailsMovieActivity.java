@@ -1,22 +1,17 @@
 package com.example.jbsjunior.popularmovies;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.jbsjunior.popularmovies.Model.Movie;
-import com.example.jbsjunior.popularmovies.server.URLServer;
-import com.squareup.picasso.Picasso;
 
 public class DetailsMovieActivity extends AppCompatActivity {
 
